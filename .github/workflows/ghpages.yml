@@ -1,7 +1,19 @@
-name: github-pages ci
-on: [push]
+name: ghpages deploy
+on:
+  push:
+    branches:
+      - main
 jobs:
-  deployghpages:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo hello world
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.17
+      - run: npm ci
+      - run: npm run build
+      - uses: JamesIves/github-pages-deploy-action@4.1.7
+        with:
+          branch: gh-pages
+          folder: dist
