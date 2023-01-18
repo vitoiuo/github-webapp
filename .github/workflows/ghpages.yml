@@ -15,5 +15,6 @@ jobs:
       - run: npm run build
       - uses: JamesIves/github-pages-deploy-action@4.1.7
         with:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           branch: gh-pages
           folder: dist
