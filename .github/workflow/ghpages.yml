@@ -1,0 +1,7 @@
+name: github-pages ci
+on: [push]
+jobs:
+  deployghpages:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo hello world
