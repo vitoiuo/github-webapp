@@ -18,3 +18,4 @@ jobs:
           token: ${{ secrets.TOKEN }}
           branch: gh-pages
           folder: dist
+          single-commit: true
