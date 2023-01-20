@@ -1,15 +1,14 @@
 <template>
-  <hello-world />
+  <github-vuwer />
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
+  import GithubVuwer from '@/components/GithubVuwer'
 
   export default {
     name: 'Home',
-
     components: {
-      HelloWorld,
+      GithubVuwer,
     },
   }
 </script>
