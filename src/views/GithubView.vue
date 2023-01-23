@@ -1,7 +1,7 @@
 <template>
   <div>
     <github-vuwer @update:repo='updateRepo' />
-    <github-repo :repo="repo" :user='user' :newPath='newPath'/>
+    <github-repo :repo="repo" :user='user'/>
   </div>
   
 </template>

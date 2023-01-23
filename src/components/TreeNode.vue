@@ -1,4 +1,5 @@
 <template>
+<div>
     <v-list
         subheader
         two-line
@@ -20,11 +21,12 @@
               <v-btn v-if='file.type === "dir"' icon @click='toggleDirFiles(file)' @file-choosed='(event) => $emit("file-choosed", event)'>
                 <v-icon color="grey lighten-1">mdi-file-tree</v-icon>
               </v-btn>
-              <v-btn v-else icon @click='showFileContent(file.path)'>
+              <v-btn v-else icon @click='showFileContent(file.download_url)'>
                 <v-icon color="grey lighten-1">mdi-code-braces</v-icon>
               </v-btn>
             </v-list-item-action>
       </v-list-item>
+      <v-divider></v-divider>
 
       <template v-if='hasChildren'>
             <tree-node 
@@ -38,16 +40,20 @@
             />
         </template>
     </v-list>
+    <popup-file-content :visible='visible' :content='fileContent'></popup-file-content>
+</div>
 </template>
 
 <script>
 import { getRepoFiles, getFileContent } from '~api'
 import TreeNode from '@/components/TreeNode'
+import popupFileContent from '@/components/popupFileContent'
 
 export default {
     name: 'TreeNode',
     components: {
-        TreeNode
+        TreeNode,
+        popupFileContent
     },
     props: {
         node: {
@@ -68,6 +74,7 @@ export default {
         return {
             file: this.node,
             fileContent: null,
+            visible: false
         }
     },
     methods: {
@@ -81,8 +88,9 @@ export default {
 
             this.file = { type: file.type, name: file.name, path: file.name, children }
         },
-        async showFileContent (file) {
-            this.fileContent =  await getFileContent(this.user.login, this.repo.name, file)
+        async showFileContent (url) {
+            this.fileContent =  await getFileContent(url)
+            this.visible = true
         }
     },
     computed: {
@@ -97,6 +105,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+//

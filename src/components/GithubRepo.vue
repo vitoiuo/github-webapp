@@ -42,14 +42,12 @@ export default {
        this.files = await getRepoFiles(this.user.login, this.repo.name) 
     },
     goTo (item) {
-        this.newPath = this.subpaths
         this.items = this.subpaths
                       .slice(0, this.items.indexOf(item))
                       .map(e => { return { text:e }});
         this.newPath = this.items.join('/')
     },
     buildBreadcumb (file) {
-        debugger
         this.subpaths = file.path.split('/')
         this.items = this.subpaths.map(e => {
           return { text:e }

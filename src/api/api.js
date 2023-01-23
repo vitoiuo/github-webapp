@@ -2,9 +2,6 @@ import axios from 'axios';
 
 const axiosInstance = axios.create({
     baseURL: 'https://api.github.com/',
-    headers: {
-        Authorization: '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' 
-    },
     timeout: 5000,
 });
 
@@ -40,8 +37,7 @@ export const getRepoFiles = async (user, repo, file = '') => {
     return response.data
 }
 
-export const getFileContent = async (user, repo, file) => {
-    const response = await axios.get(`https://raw.githubusercontent.com/${user}/${repo}/main/${file}`)
-    debugger
-    return response
+export const getFileContent = async (url) => {
+    const response = await axios.get(url)
+    return response.data
 }
