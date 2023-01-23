@@ -5,5 +5,5 @@ module.exports = defineConfig({
   transpileDependencies: [
     'vuetify'
   ],
-  publicPath: './' 
+  publicPath: '/github-webapp/' 
 })
