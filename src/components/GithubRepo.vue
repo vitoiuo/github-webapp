@@ -58,6 +58,9 @@ export default {
       },
       user: {
         type: Object
+      },
+      newPath: {
+        type: String
       }
   },
   data () {
@@ -77,6 +80,9 @@ export default {
   watch: {
     async repo () {
       await this.listRepoFiles()
+    },
+    async newPath (newPath) {
+      this.files = await getRepoFiles(this.user.login, this.repo.name, newPath) 
     }
   }
 }
