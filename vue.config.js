@@ -1,9 +1,19 @@
 const { defineConfig } = require('@vue/cli-service')
-const { nodeInternals } = require('stack-utils')
-const { node } = require('webpack')
+const path = require('path');
+
+const apimock = process.env.API_MOCK == '1'
+const apipath = apimock ? 'src/api/api_mock.js' : 'src/api/api.js'
+
 module.exports = defineConfig({
   transpileDependencies: [
     'vuetify'
   ],
-  publicPath: '/github-webapp/' 
+  publicPath: '/github-webapp/',
+  configureWebpack: {
+    resolve: {
+      alias: {
+        "~api": path.resolve(__dirname, apipath)
+      }
+    }
+  }
 })

@@ -37,7 +37,7 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import {getGithubUser, getUserRepos} from '@/api/api.js'
+import {getGithubUser, getUserRepos} from '~api'
 
 export default {
   data() {
