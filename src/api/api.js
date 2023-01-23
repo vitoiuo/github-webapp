@@ -9,7 +9,6 @@ const fetchAllPages = async (url) => {
     let results = [] 
     let page = 1
     let hasResult = true
-    debugger
     while (hasResult) {
         const response = await axiosInstance.get(`${url}?page=${page}`)
         if (response.data.length) {
@@ -31,4 +30,9 @@ export const getGithubUser = async (searchTerm) => {
 export const getUserRepos = async (user) => {
     const response = await fetchAllPages(`users/${user}/repos`)
     return response
+}
+
+export const getRepoFiles = async (user, repo, file = '') => {
+    const response = await axiosInstance.get(`repos/${user}/${repo}/contents/${file}`)
+    return response.data
 }

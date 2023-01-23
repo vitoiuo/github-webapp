@@ -21,8 +21,9 @@
          <v-select
           v-model="repo"
           :items="repoList"
-          item-text="name"
           :loading="isLoading"
+          @change="emitRepo"
+          item-text="name"
           label="Select the repository"
           persistent-hint
           return-object
@@ -30,9 +31,7 @@
         ></v-select>
       </v-col>
     </v-row>
-
-    </v-container>
-    
+  </v-container>
 </template>
 
 <script>
@@ -57,10 +56,12 @@ export default {
     }, 1000),
     async listUserRepos (user) {
       this.isLoading = true
-      const data = await getUserRepos(user)
-      this.repoList = data
+      this.repoList = await getUserRepos(user)
       this.isLoading = false
-    } 
+    }, 
+    emitRepo(repo) {
+        this.$emit('update:repo', { repo, owner:this.user })
+    }
   },
   watch: {
     user (newValue) {
