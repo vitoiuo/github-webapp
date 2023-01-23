@@ -1,6 +1,15 @@
 <template>
   <v-container>
-    <tree-node v-for='file in files' :key='file.path' :node='file' :user='user' :repo='repo'/>
+    <v-breadcrumbs :items="items">
+      <template v-slot:item="{ item }">
+        <v-breadcrumbs-item
+        @click.native='goTo(item.text)'
+        >
+          {{ item.text.toUpperCase() }}
+        </v-breadcrumbs-item>
+      </template>
+    </v-breadcrumbs>
+    <tree-node v-for='file in files' :key='file.path' :node='file' :user='user' :repo='repo' @file-choosed='buildBreadcumb'/>
   </v-container>
 </template>
 
@@ -14,7 +23,10 @@ export default {
   },
   data () {
     return {
-      files: []
+      files: [],
+      items: [],
+      subpaths: [],
+      newPath: null,
     }
   },
   props: {
@@ -24,14 +36,25 @@ export default {
       user: {
         type: Object
       },
-      newPath: {
-        type: String
-      }
   },
   methods: {
     async listRepoFiles () {
        this.files = await getRepoFiles(this.user.login, this.repo.name) 
-    }, 
+    },
+    goTo (item) {
+        this.newPath = this.subpaths
+        this.items = this.subpaths
+                      .slice(0, this.items.indexOf(item))
+                      .map(e => { return { text:e }});
+        this.newPath = this.items.join('/')
+    },
+    buildBreadcumb (file) {
+        debugger
+        this.subpaths = file.path.split('/')
+        this.items = this.subpaths.map(e => {
+          return { text:e }
+        });
+    }
   },
   watch: {
     async repo () {
