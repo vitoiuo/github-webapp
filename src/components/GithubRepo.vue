@@ -34,8 +34,8 @@
             <v-list-item-avatar>
               <v-icon
                 dark
-                v-tex='mdi-file-check-outline'
               >
+                mdi-file-check-outline
               </v-icon>
             </v-list-item-avatar>
 
@@ -70,6 +70,7 @@ export default {
        this.files = await getRepoFiles(this.user.login, this.repo.name) 
     }, 
     async listDirFiles(file) {
+      this.$emit('file-choosed', file)
       this.files = await getRepoFiles(this.user.login, this.repo.name, file) 
     }
   },

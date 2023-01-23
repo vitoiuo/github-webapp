@@ -5,7 +5,7 @@
       large
     ></v-breadcrumbs>
     <github-vuwer @update:repo='updateRepo' />
-    <github-repo :repo="repo" :user='user' />
+    <github-repo :repo="repo" :user='user' @file-choosed='buildBreadcumb' />
   </div>
   
 </template>
@@ -24,17 +24,19 @@
       return {
         repo: null,
         user: null,
-        items: [
-          {text:'a'},
-          {text:'b'},
-          {text:'c'},
-        ]
+        items: []
       }
     },
     methods: {
       updateRepo (event) {
         this.repo = event.repo
         this.user = event.owner
+      },
+      buildBreadcumb (path) {
+        const subpaths = path.split('/')
+        this.items = subpaths.map(e => {
+          return { text:e }
+        });
       }
     }
   }
