@@ -37,7 +37,6 @@
     methods: {
       goTo (item) {
         this.newPath = this.subpaths
-        debugger
         this.items = this.subpaths
                       .slice(0, this.items.indexOf(item))
                       .map(e => { return { text:e }});
