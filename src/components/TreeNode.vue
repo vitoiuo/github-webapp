@@ -7,9 +7,8 @@
       >
         <v-list-item>
             <v-list-item-avatar>
-                <v-icon
-                >
-                {{ file.type === 'dir' ? 'mdi-folder' : 'mdi-file' }}
+                <v-icon>
+                    {{ file.type === 'dir' ? 'mdi-folder' : 'mdi-file' }}
                 </v-icon>
             </v-list-item-avatar>
 
@@ -18,12 +17,15 @@
             </v-list-item-content>
 
             <v-list-item-action >
-              <v-btn v-if='file.type === "dir"' icon @click='toggleDirFiles(file)' @file-choosed='(event) => $emit("file-choosed", event)'>
+              <v-btn
+                v-if='file.type === "dir"'
+                icon
+                @click='toggleDirFiles(file)'
+                @node-choosed='emitNodeChoosed'
+            >
                 <v-icon color="grey lighten-1">mdi-file-tree</v-icon>
               </v-btn>
-              <v-btn v-else icon @click='showFileContent(file.download_url)'>
-                <v-icon color="grey lighten-1">mdi-code-braces</v-icon>
-              </v-btn>
+              <popup-file-content v-else :file='file' />
             </v-list-item-action>
       </v-list-item>
       <v-divider></v-divider>
@@ -36,16 +38,16 @@
                 :spacing='spacing + 20'
                 :user='user'
                 :repo='repo'
-                @file-choosed='(event) => $emit("file-choosed", event)'
+                @node-choosed='emitNodeChoosed'
             />
         </template>
     </v-list>
-    <popup-file-content :visible='visible' :content='fileContent'></popup-file-content>
+    
 </div>
 </template>
 
 <script>
-import { getRepoFiles, getFileContent } from '~api'
+import { getRepoFiles } from '~api'
 import TreeNode from '@/components/TreeNode'
 import popupFileContent from '@/components/popupFileContent'
 
@@ -60,10 +62,12 @@ export default {
             type: Object
         },
         user: {
-            type: Object
+            type: Object,
+            required: true
         },
         repo: {
-            type: Object
+            type: Object,
+            required: true
         },
         spacing: {
             type: Number,
@@ -73,25 +77,21 @@ export default {
     data () {
         return {
             file: this.node,
-            fileContent: null,
-            visible: false
         }
     },
     methods: {
+        emitNodeChoosed (event) {
+            this.$emit("node-choosed", event)
+        },
         async toggleDirFiles(file) {
             if(this.file.children) {
-                this.$emit("file-choosed", { path:'' })
+                this.$emit("node-choosed", { path:'' })
                 return this.file.children = null 
             }
-            this.$emit('file-choosed', file)
+            this.emitNodeChoosed(file)
             const children = await getRepoFiles(this.user.login, this.repo.name, file.path)
-
             this.file = { type: file.type, name: file.name, path: file.name, children }
         },
-        async showFileContent (url) {
-            this.fileContent =  await getFileContent(url)
-            this.visible = true
-        }
     },
     computed: {
         hasChildren () {

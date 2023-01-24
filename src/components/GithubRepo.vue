@@ -9,7 +9,14 @@
         </v-breadcrumbs-item>
       </template>
     </v-breadcrumbs>
-    <tree-node v-for='file in files' :key='file.path' :node='file' :user='user' :repo='repo' @file-choosed='buildBreadcumb'/>
+    <tree-node
+      v-for='node in nodes'
+      :key='node.path'
+      :node='node'
+      :user='user'
+      :repo='repo'
+      @node-choosed='buildBreadcumb'
+    />
   </v-container>
 </template>
 
@@ -23,7 +30,7 @@ export default {
   },
   data () {
     return {
-      files: [],
+      nodes: [],
       items: [],
       subpaths: [],
       newPath: null,
@@ -39,7 +46,7 @@ export default {
   },
   methods: {
     async listRepoFiles () {
-       this.files = await getRepoFiles(this.user.login, this.repo.name) 
+       this.nodes = await getRepoFiles(this.user.login, this.repo.name) 
     },
     goTo (item) {
         this.items = this.subpaths
@@ -47,8 +54,8 @@ export default {
                       .map(e => { return { text:e }});
         this.newPath = this.items.join('/')
     },
-    buildBreadcumb (file) {
-        this.subpaths = file.path.split('/')
+    buildBreadcumb (node) {
+        this.subpaths = node.path.split('/')
         this.items = this.subpaths.map(e => {
           return { text:e }
         });
@@ -59,7 +66,7 @@ export default {
       await this.listRepoFiles()
     },
     async newPath (newPath) {
-      this.files = await getRepoFiles(this.user.login, this.repo.name, newPath) 
+      this.nodes = await getRepoFiles(this.user.login, this.repo.name, newPath) 
     }
   }
 }

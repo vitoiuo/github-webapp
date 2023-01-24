@@ -4,13 +4,14 @@
       <v-col cols='6'>
         <v-autocomplete
           v-model="user"
+          :loading="true"
           :items="userList"
-          :loading="isLoading"
           :search-input.sync="searchedUser"
-          @keyup="debouncedFindUser"
+          @input.native="debouncedFindUser"
           item-text='login'
           color="white"
           hide-no-data
+          hide-details
           label="Github user"
           placeholder="Start typing to Search"
           return-object
@@ -21,7 +22,7 @@
          <v-select
           v-model="repo"
           :items="repoList"
-          :loading="isLoading"
+          :loading="repoIsLoading"
           @change="emitRepo"
           item-text="name"
           label="Select the repository"
@@ -43,7 +44,7 @@ export default {
     return {
       user: null,
       userList: [],
-      isLoading: false,
+      repoIsLoading: false,
       searchedUser: null,
       repo: '',
       repoList: []
@@ -55,9 +56,9 @@ export default {
       this.userList = data.items
     }, 1000),
     async listUserRepos (user) {
-      this.isLoading = true
+      this.repoIsLoading = true
       this.repoList = await getUserRepos(user)
-      this.isLoading = false
+      this.repoIsLoading = false
     }, 
     emitRepo(repo) {
         this.$emit('update:repo', { repo, owner:this.user })
