@@ -10,7 +10,7 @@
             v-on="on"
             @click.once="showFileContent"  
           >
-        <v-icon>mdi-code-braces</v-icon>
+        <v-icon>mdi-code-json</v-icon>
         </v-btn>
       </template>
       <v-card>

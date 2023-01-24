@@ -1,7 +1,15 @@
 <template>
   <v-container class='mt-10'>
     <v-row class='px-5'>
-      <v-col cols='6'>
+      <v-col cols='3'>
+         <v-avatar v-if='user'>
+          <img
+            :src="user.avatar_url"
+            alt="user.login"
+          >
+        </v-avatar>
+      </v-col>
+      <v-col cols='4'>
         <v-autocomplete
           v-model="user"
           :loading="true"
@@ -16,9 +24,9 @@
           placeholder="Start typing to Search"
           return-object
           >
-          </v-autocomplete>
+        </v-autocomplete>
       </v-col>
-      <v-col cols='6'>
+      <v-col cols='5'>
          <v-select
           v-model="repo"
           :items="repoList"
@@ -54,14 +62,14 @@ export default {
     debouncedFindUser: debounce(async function () {
       const data = await getGithubUser(this.searchedUser)
       this.userList = data.items
-    }, 1000),
+    }, 500),
     async listUserRepos (user) {
       this.repoIsLoading = true
       this.repoList = await getUserRepos(user)
       this.repoIsLoading = false
     }, 
     emitRepo(repo) {
-        this.$emit('update:repo', { repo, owner:this.user })
+      this.$emit('update:repo', { repo, owner:this.user })
     }
   },
   watch: {
@@ -71,7 +79,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

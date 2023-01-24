@@ -7,8 +7,8 @@
       >
         <v-list-item>
             <v-list-item-avatar>
-                <v-icon>
-                    {{ file.type === 'dir' ? 'mdi-folder' : 'mdi-file' }}
+                <v-icon :color='iconColor'>
+                    {{ file.type === 'dir' ? 'mdi-folder' : fileIcon }}
                 </v-icon>
             </v-list-item-avatar>
 
@@ -27,14 +27,14 @@
               </v-btn>
               <popup-file-content v-else :file='file' />
             </v-list-item-action>
-      </v-list-item>
+        </v-list-item>
       <v-divider></v-divider>
 
       <template v-if='hasChildren'>
             <tree-node 
-                v-for='file in file.children' 
-                :key='file.path' 
-                :node='file'
+                v-for='(child, index) in file.children' 
+                :key='index' 
+                :node='child'
                 :spacing='spacing + 20'
                 :user='user'
                 :repo='repo'
@@ -42,7 +42,6 @@
             />
         </template>
     </v-list>
-    
 </div>
 </template>
 
@@ -76,7 +75,7 @@ export default {
     },
     data () {
         return {
-            file: this.node,
+            file: this.node
         }
     },
     methods: {
@@ -85,7 +84,7 @@ export default {
         },
         async toggleDirFiles(file) {
             if(this.file.children) {
-                this.$emit("node-choosed", { path:'' })
+                this.emitNodeChoosed( { path:'' })
                 return this.file.children = null 
             }
             this.emitNodeChoosed(file)
@@ -100,9 +99,22 @@ export default {
         },
         nodeMargin () {
             return `margin-left: ${this.spacing}px`
-        } 
+        },
+        fileExtension () {
+            return this.file.name.includes('.') ? this.file.name.split('.').pop() : ''
+        },
+        fileIcon () {
+            const ICON_MAP = {'js':'mdi-language-javascript', 'py':'mdi-language-python', 'html':'mdi-language-html5', 'css':'mdi-language-css3','md':'mdi-language-markdown'}
+
+            if (this.fileExtension in ICON_MAP) return ICON_MAP[this.fileExtension]
+            return 'mdi-file'
+        },
+        iconColor () {
+            const COLOR_MAP = {'js':'yellow darken-2', 'py':'light-blue darken-3', 'html':'orange darken-4', 'css':'light-blue darken-1','md':'blue-grey'}
+
+            if (this.fileExtension in COLOR_MAP) return COLOR_MAP[this.fileExtension]
+            return 'blue-grey darken-4'
+        }
     },
 }
 </script>
-
-//
