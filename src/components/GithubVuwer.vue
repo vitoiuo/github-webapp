@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <v-row>
+  <v-container class='mt-10'>
+    <v-row class='px-5'>
       <v-col cols='6'>
         <v-autocomplete
           v-model="user"

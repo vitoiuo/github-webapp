@@ -18,7 +18,7 @@
           <span class="text-h5">{{ file.name }}</span>
         </v-card-title>
         <v-card-text>
-           <code-highlight language="javascript">
+           <code-highlight>
             <pre v-for='(line, index) in lines' :key='index'>
               {{ line }}
             </pre> 
