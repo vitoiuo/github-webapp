@@ -8,7 +8,7 @@
         <v-list-item>
             <v-list-item-avatar>
                 <v-icon :color='iconColor'>
-                    {{ file.type === 'dir' ? 'mdi-folder' : fileIcon }}
+                    {{ fileIcon }}
                 </v-icon>
             </v-list-item-avatar>
 
@@ -105,8 +105,10 @@ export default {
         },
         fileIcon () {
             const ICON_MAP = {'js':'mdi-language-javascript', 'py':'mdi-language-python', 'html':'mdi-language-html5', 'css':'mdi-language-css3','md':'mdi-language-markdown'}
-
-            if (this.fileExtension in ICON_MAP) return ICON_MAP[this.fileExtension]
+            
+            if (this.hasChildren) return 'mdi-folder-open'
+            else if (this.file.type === 'dir') return 'mdi-folder'
+            else if (this.fileExtension in ICON_MAP) return ICON_MAP[this.fileExtension]
             return 'mdi-file'
         },
         iconColor () {
