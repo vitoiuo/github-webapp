@@ -55,6 +55,7 @@ export default {
   },
   watch: {
     async repo () {
+      this.items = []
       await this.listRepoFiles()
     },
   }
